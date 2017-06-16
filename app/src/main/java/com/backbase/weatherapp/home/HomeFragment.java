@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +12,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.backbase.weatherapp.R;
-import com.backbase.weatherapp.util.db.DBHelper;
+import com.backbase.weatherapp.main.IFavAddedListener;
+import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.util.db.dao.CityDao;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeFragment extends BottomSheetDialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class HomeFragment extends BottomSheetDialogFragment implements IFavAddedListener {
 
     private static final int ID_CITY_LOADER = 1;
 
     private ListView recyclerView;
     private CityAdapter cityAdapter;
+    private HomePresenter homePresenter;
 
     public HomeFragment() {
     }
@@ -42,7 +41,10 @@ public class HomeFragment extends BottomSheetDialogFragment implements LoaderMan
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(ID_CITY_LOADER, null, this);
+        homePresenter = new HomePresenter(getActivity());
+        Cursor cursor = homePresenter.getFavCities();
+        cityAdapter = new CityAdapter(getActivity(), cursor);
+        recyclerView.setAdapter(cityAdapter);
     }
 
     private void initControls(View parent) {
@@ -50,19 +52,10 @@ public class HomeFragment extends BottomSheetDialogFragment implements LoaderMan
     }
 
     @Override
-    public Loader onCreateLoader(int id, Bundle args) {
-        return new FavCityLoader(getActivity());
-    }
-
-    @Override
-    public void onLoadFinished(Loader loader, Cursor data) {
-        cityAdapter = new CityAdapter(getActivity(), data);
-        recyclerView.setAdapter(cityAdapter);
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-
+    public void onAdded(City city) {
+        Cursor cursor = homePresenter.getFavCities();
+        cityAdapter.swapCursor(cursor);
+        cityAdapter.notifyDataSetChanged();
     }
 
     private class CityAdapter extends CursorAdapter {
@@ -94,16 +87,5 @@ public class HomeFragment extends BottomSheetDialogFragment implements LoaderMan
 
     }
 
-    class FavCityLoader extends AsyncTaskLoader<Cursor> {
 
-        public FavCityLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-            CityDao cityDao = new CityDao(DBHelper.getInstance(getActivity()));
-            return cityDao.getCitiesCursor();
-        }
-    }
 }

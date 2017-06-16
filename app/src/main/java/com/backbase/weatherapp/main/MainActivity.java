@@ -23,10 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.home.HomeFragment;
+import com.backbase.weatherapp.home.HomePresenter;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.util.IFragmentInteraction;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +46,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements IFragmentInteraction,
         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
         LoaderManager.LoaderCallbacks, LocationListener {
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     private MapPresenter mapPresenter;
     private FusedLocationProviderClient locationProviderClient;
     private Location currentLocation;
+    private List<IFavAddedListener> favAddedListeners;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +73,16 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
 
         mapPresenter = new MapPresenter(this);
 
+        favAddedListeners = new ArrayList<>();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        HomeFragment homeFragment = new HomeFragment();
+        favAddedListeners.add(homeFragment);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content_fragment, new HomeFragment())
+                .add(R.id.content_fragment, homeFragment)
                 .commit();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -199,6 +209,13 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
             public void onInfoWindowClick(Marker marker) {
                 String city = (String) marker.getTag();
                 mapPresenter.saveCityAsFav(city, marker.getPosition());
+                for(IFavAddedListener listener:favAddedListeners) {
+                    City c = new City();
+                    c.setLon(marker.getPosition().longitude);
+                    c.setLat(marker.getPosition().latitude);
+                    c.setDesc(city);
+                    listener.onAdded(c);
+                }
             }
         });
 
