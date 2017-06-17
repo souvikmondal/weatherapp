@@ -1,5 +1,7 @@
 package com.backbase.weatherapp.model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Souvik on 16/06/17.
  */
@@ -9,6 +11,12 @@ public class City {
     private String desc;
     private double lat;
     private double lon;
+    private LatLng latLng;
+
+    public LatLng getLatLng() {
+        latLng = new LatLng(lat, lon);
+        return latLng;
+    }
 
     public double getLat() {
         return lat;

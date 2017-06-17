@@ -91,7 +91,12 @@ class MapPresenter {
             List<Address> addresses = geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
-                return address.getLocality();
+                String city = address.getLocality();
+                if (city == null)
+                    city = address.getSubAdminArea();
+                if (city == null)
+                    city = address.getAdminArea();
+                return city;
             }
             return null;
         }

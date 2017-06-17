@@ -2,11 +2,16 @@ package com.backbase.weatherapp.home;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.TextView;
 
 import com.backbase.weatherapp.util.AsyncProvider;
 import com.backbase.weatherapp.util.db.DBHelper;
 import com.backbase.weatherapp.util.db.dao.CityDao;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -19,8 +24,11 @@ public class HomePresenter {
 
     private Context context;
 
+    private Map<TextView, WeakReference<FutureTask>> requestMap;
+
     public HomePresenter(Context context) {
         this.context = context;
+        requestMap = new HashMap<>();
     }
 
     public Cursor getFavCities() {
@@ -45,6 +53,13 @@ public class HomePresenter {
         }
 
         return null;
+    }
+
+    public void cancelPotentialDownload(TextView textView, LatLng latLng) {
+        WeakReference<FutureTask> taskWeakReference = requestMap.get(textView);
+        if (taskWeakReference != null) {
+            taskWeakReference.get().cancel(true);
+        }
     }
 
 }

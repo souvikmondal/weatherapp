@@ -14,6 +14,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
@@ -53,7 +54,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IFragmentInteraction,
         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
-        LoaderManager.LoaderCallbacks, LocationListener {
+        LoaderManager.LoaderCallbacks, LocationListener, IMainActivityListener,
+        FragmentManager.OnBackStackChangedListener {
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
@@ -81,27 +83,35 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+
+        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+
         HomeFragment homeFragment = new HomeFragment();
         favAddedListeners.add(homeFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content_fragment, homeFragment)
                 .commit();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        FrameLayout bottomSheetParent = (FrameLayout) findViewById(R.id.content_fragment);
-        BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(bottomSheetParent);
-        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        sheetBehavior.blocksInteractionBelow((CoordinatorLayout) bottomSheetParent.getParent(), bottomSheetParent);
-
     }
 
+    @Override
     public void showDetails() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, new DetailFragment())
+                .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void showMap() {
+        SupportMapFragment mapFragment = new SupportMapFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_fragment, mapFragment)
+                .addToBackStack(null)
+                .commit();
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -257,6 +267,18 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getSupportFragmentManager().popBackStack();
+        return true;
     }
 
     class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.util.db.DBContract;
 import com.backbase.weatherapp.util.db.DBHelper;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,14 @@ public class CityDao {
 
     public static String getCityName(Cursor cursor) {
         return cursor.getString(cursor.getColumnIndex(DBContract.COL_CITY));
+    }
+
+    public static City getCity(Cursor cursor) {
+        City city = new City();
+        city.setDesc(cursor.getString(cursor.getColumnIndex(DBContract.COL_CITY)));
+        city.setLat(cursor.getDouble(cursor.getColumnIndex(DBContract.COL_LAT)));
+        city.setLon(cursor.getDouble(cursor.getColumnIndex(DBContract.COL_LON)));
+        return city;
     }
 
     public Cursor getCitiesCursor() {

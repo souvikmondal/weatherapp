@@ -17,7 +17,7 @@ public final class AsyncProvider {
     private ThreadPoolExecutor threadPoolExecutor;
 
     private AsyncProvider() {
-        threadPoolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
     }
 
     public static final AsyncProvider getInstance() {
