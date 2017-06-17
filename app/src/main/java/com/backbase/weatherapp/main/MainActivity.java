@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.backbase.weatherapp.R;
+import com.backbase.weatherapp.details.DetailFragment;
 import com.backbase.weatherapp.home.HomeFragment;
 import com.backbase.weatherapp.home.HomePresenter;
 import com.backbase.weatherapp.model.City;
@@ -90,8 +92,16 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
         mapFragment.getMapAsync(this);
 
         FrameLayout bottomSheetParent = (FrameLayout) findViewById(R.id.content_fragment);
-        BottomSheetBehavior.from(bottomSheetParent).setState(BottomSheetBehavior.STATE_EXPANDED);
+        BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(bottomSheetParent);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        sheetBehavior.blocksInteractionBelow((CoordinatorLayout) bottomSheetParent.getParent(), bottomSheetParent);
 
+    }
+
+    public void showDetails() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_fragment, new DetailFragment())
+                .commit();
     }
 
     @Override

@@ -8,11 +8,13 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.main.IFavAddedListener;
+import com.backbase.weatherapp.main.MainActivity;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.util.db.dao.CityDao;
 
@@ -49,6 +51,12 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
 
     private void initControls(View parent) {
         recyclerView = (ListView) parent.findViewById(R.id.rv_cities);
+        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((MainActivity)getActivity()).showDetails();
+            }
+        });
     }
 
     @Override
