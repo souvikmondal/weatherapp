@@ -1,5 +1,6 @@
 package com.backbase.weatherapp.widget;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -14,19 +15,27 @@ public class ImageLoaderCallback implements IDownloadListener<Bitmap> {
 
     private WeakReference<ImageView> imageViewWeakReference;
     public String url;
+    private Activity activity;
 
-    public ImageLoaderCallback(ImageView imageView, String url) {
+    public ImageLoaderCallback(ImageView imageView, String url, Activity activity) {
         imageViewWeakReference = new WeakReference<ImageView>(imageView);
         this.url = url;
+        this.activity = activity;
     }
 
     @Override
-    public void completed(String url, Bitmap bitmap) {
+    public void completed(String url, final Bitmap bitmap) {
         if (imageViewWeakReference != null) {
-            ImageView imageView = imageViewWeakReference.get();
+            final ImageView imageView = imageViewWeakReference.get();
             ImageLoaderCallback imageLoaderCallback = getImageLoaderCallback(imageView);
             if ((this == imageLoaderCallback)) {
-                imageView.setImageBitmap(bitmap);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+
             }
         }
     }

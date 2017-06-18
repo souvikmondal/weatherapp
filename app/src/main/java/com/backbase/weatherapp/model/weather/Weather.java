@@ -6,15 +6,24 @@ package com.backbase.weatherapp.model.weather;
 
 public class Weather {
 
-    private String id;
+    private int id;
     private String main;
     private String description;
+    private String icon;
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -22,7 +31,7 @@ public class Weather {
         this.main = main;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

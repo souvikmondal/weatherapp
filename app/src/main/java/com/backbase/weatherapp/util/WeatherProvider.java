@@ -29,7 +29,7 @@ public final class WeatherProvider {
     private static Gson gson = new GsonBuilder().create();
 
     private static final String URL = "http://api.openweathermap.org/data/2.5/" +
-            "weather?lat=$lat&lon=$lon&appid=9c1f915599217340bb8b97ad31019648&units=metric";
+                "weather?lat=$lat&lon=$lon&appid=9c1f915599217340bb8b97ad31019648&units=metric";
 
     public static final void retrieveWeather(LatLng latLng, String unit,
                                              IDownloadListener<Climate> listener){

@@ -33,6 +33,7 @@ import com.backbase.weatherapp.details.DetailFragment;
 import com.backbase.weatherapp.home.HomeFragment;
 import com.backbase.weatherapp.home.HomePresenter;
 import com.backbase.weatherapp.model.City;
+import com.backbase.weatherapp.model.weather.Climate;
 import com.backbase.weatherapp.util.IFragmentInteraction;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -97,9 +98,11 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     }
 
     @Override
-    public void showDetails() {
+    public void showDetails(Climate data) {
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setTodayClimate(data);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_fragment, new DetailFragment())
+                .replace(R.id.content_fragment, detailFragment)
                 .addToBackStack(null)
                 .commit();
     }

@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimaryLight">#D500F9</color>
+    <color name="colorPrimaryDark">#4A148C</color>
+    <color name="colorPrimaryLightDark">#7A1EA1</color>
+    <color name="colorAccent">#FB8C00</color>
+    <color name="colorPrimaryText">#FFFFFF</color>
+
+    <color name="colorWeatherBackgroundRainy">#009688</color>
+    <color name="colorWeatherTextRainy">#E0F7FA</color>
+
+    <color name="colorWeatherBackgroundClearDay">#FFF9C4</color>
+    <color name="colorWeatherTextClearDay">#F57F17</color>
+
+    <color name="colorWeatherBackgroundCloudy">#2196F3</color>
+    <color name="colorWeatherTextCloudy">#FFFFFF</color>
+
+    <color name="colorWeatherBackgroundStorm">#455A64</color>
+    <color name="colorWeatherTextStorm">#FFFFFF</color>
+
+    <color name="colorWeatherBackgroundSnow">#00BCD4</color>
+    <color name="colorWeatherTextSnow">#FFFFFF</color>
+
+    <color name="colorWeatherBackgroundDrizzle">#E0F2F1</color>
+    <color name="colorWeatherTextDrizzle">#004D40</color>
 </resources>
