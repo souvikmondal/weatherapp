@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util;
+package com.backbase.weatherapp.util.provider;
 
 /**
  * Created by Souvik on 17/06/17.

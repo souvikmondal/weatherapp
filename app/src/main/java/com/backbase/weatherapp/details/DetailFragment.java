@@ -16,25 +16,29 @@ import android.widget.ImageView;
 
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.databinding.WeatherTodayLayoutBinding;
+import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.model.weather.Climate;
+import com.backbase.weatherapp.util.provider.IDownloadListener;
+import com.backbase.weatherapp.util.provider.WeatherProvider;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements IDownloadListener{
 
-    View customToolBar;
-    private Climate todayClimate;
+    private View customToolBar;
+    private WeatherTodayLayoutBinding binding;
+    private City city;
     private DetailPresenter detailPresenter;
 
     public DetailFragment() {
     }
 
-    public void setTodayClimate(Climate climate) {
-        todayClimate = climate;
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    private void controlTodayWeatherColorScheme() {
+    private void controlTodayWeatherColorScheme(Climate todayClimate) {
 
         ((ImageView)customToolBar.findViewById(R.id.statusimage))
                 .setImageDrawable(getResources().getDrawable(
@@ -57,25 +61,15 @@ public class DetailFragment extends Fragment {
         super.onAttach(context);
         detailPresenter = new DetailPresenter((AppCompatActivity) context);
         setCustomToolBarForFragment();
-        controlTodayWeatherColorScheme();
+        WeatherProvider.getInstance().retrieveWeather(city.getLatLng(), "metric", this, false);
     }
 
     private void setCustomToolBarForFragment() {
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appBar);
 
-        Toolbar toolbar = (Toolbar) appBarLayout.findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorWeatherBackgroundClearDay));
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWeatherTextClearDay));
-        toolbar.getOverflowIcon().setColorFilter(
-                getResources().getColor(R.color.colorWeatherTextClearDay),
-                PorterDuff.Mode.SRC_ATOP);
-        toolbar.getNavigationIcon().setColorFilter(
-                getResources().getColor(R.color.colorWeatherTextClearDay),
-                PorterDuff.Mode.SRC_ATOP);
-
-        WeatherTodayLayoutBinding binding = DataBindingUtil.inflate(getActivity().
+        binding = DataBindingUtil.inflate(getActivity().
                 getLayoutInflater(), R.layout.weather_today_layout, null, false);
-        binding.setModel(detailPresenter.getTodayWeatherBindingModel(todayClimate));
+        binding.setModel(detailPresenter.getInitialWeatherBindingModel(city));
 
         // set CustomView
         customToolBar = binding.getRoot();
@@ -86,17 +80,6 @@ public class DetailFragment extends Fragment {
     private void removeCustomToolbar() {
         AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appBar);
 
-        Toolbar toolbar = (Toolbar) appBarLayout.findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryText));
-
-        toolbar.getOverflowIcon().setColorFilter(
-                getResources().getColor(R.color.colorPrimaryText),
-                PorterDuff.Mode.SRC_ATOP);
-        toolbar.getNavigationIcon().setColorFilter(
-                getResources().getColor(R.color.colorPrimaryText),
-                PorterDuff.Mode.SRC_ATOP);
-
         appBarLayout.removeView(customToolBar);
     }
 
@@ -104,5 +87,15 @@ public class DetailFragment extends Fragment {
     public void onStop() {
         super.onStop();
         removeCustomToolbar();
+    }
+
+    @Override
+    public void completed(String key, Object data) {
+        if (data instanceof Climate) {
+            Climate c = (Climate) data;
+            c.setName(city.getDesc());
+            binding.setModel(detailPresenter.getTodayWeatherBindingModel(c));
+            binding.executePendingBindings();
+        }
     }
 }

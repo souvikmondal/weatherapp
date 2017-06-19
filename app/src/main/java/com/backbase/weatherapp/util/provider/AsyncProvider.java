@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util;
+package com.backbase.weatherapp.util.provider;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;

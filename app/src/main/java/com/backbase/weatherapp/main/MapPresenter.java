@@ -5,7 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.backbase.weatherapp.model.City;
-import com.backbase.weatherapp.util.AsyncProvider;
+import com.backbase.weatherapp.util.provider.AsyncProvider;
 import com.backbase.weatherapp.util.db.DBHelper;
 import com.backbase.weatherapp.util.db.dao.CityDao;
 import com.google.android.gms.maps.model.LatLng;

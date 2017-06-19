@@ -55,7 +55,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IFragmentInteraction,
         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
-        LoaderManager.LoaderCallbacks, LocationListener, IMainActivityListener,
+        LoaderManager.LoaderCallbacks, LocationListener,
         FragmentManager.OnBackStackChangedListener {
 
     private GoogleMap googleMap;
@@ -97,17 +97,15 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
 
     }
 
-    @Override
-    public void showDetails(Climate data) {
+    public void showDetails(City data) {
         DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setTodayClimate(data);
+        detailFragment.setCity(data);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, detailFragment)
                 .addToBackStack(null)
                 .commit();
     }
 
-    @Override
     public void showMap() {
         SupportMapFragment mapFragment = new SupportMapFragment();
         getSupportFragmentManager().beginTransaction()

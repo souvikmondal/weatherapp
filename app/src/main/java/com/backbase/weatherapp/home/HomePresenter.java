@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.widget.TextView;
 
-import com.backbase.weatherapp.util.AsyncProvider;
+import com.backbase.weatherapp.util.provider.AsyncProvider;
 import com.backbase.weatherapp.util.db.DBHelper;
 import com.backbase.weatherapp.util.db.dao.CityDao;
 import com.google.android.gms.maps.model.LatLng;

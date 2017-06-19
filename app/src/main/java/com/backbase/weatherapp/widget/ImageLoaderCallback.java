@@ -3,11 +3,9 @@ package com.backbase.weatherapp.widget;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import com.backbase.weatherapp.util.IDownloadListener;
+import com.backbase.weatherapp.util.provider.IDownloadListener;
 
 import java.lang.ref.WeakReference;
 

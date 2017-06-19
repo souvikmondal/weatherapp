@@ -1,46 +1,29 @@
 package com.backbase.weatherapp.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.CursorAdapter;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.main.IFavAddedListener;
-import com.backbase.weatherapp.main.IMainActivityListener;
 import com.backbase.weatherapp.main.MainActivity;
 import com.backbase.weatherapp.model.City;
-import com.backbase.weatherapp.model.weather.Climate;
-import com.backbase.weatherapp.util.IDownloadListener;
-import com.backbase.weatherapp.util.ImageProvider;
-import com.backbase.weatherapp.util.WeatherProvider;
 import com.backbase.weatherapp.util.db.dao.CityDao;
-import com.backbase.weatherapp.widget.DownloadedDrawable;
-import com.backbase.weatherapp.widget.ImageLoaderCallback;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.lang.ref.WeakReference;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class HomeFragment extends BottomSheetDialogFragment implements IFavAddedListener {
 
-    private static final String URL = "http://openweathermap.org/img/w/";
+
 
     private static final int ID_CITY_LOADER = 1;
 
@@ -81,7 +64,7 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((IMainActivityListener)getActivity()).showMap();
+                ((MainActivity)getActivity()).showMap();
             }
         });
     }
@@ -106,86 +89,17 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            CityViewHolder viewHolder = (CityViewHolder) view.getTag();
+            FavListRowController viewHolder = (FavListRowController) view.getTag();
             if (viewHolder == null) {
-                viewHolder = new CityViewHolder();
-                viewHolder.cityDescTv = (TextView) view.findViewById(R.id.city_name);
-                viewHolder.tempTextView = (TextView) view.findViewById(R.id.temp);
-                viewHolder.imageView = (ImageView) view.findViewById(R.id.image);
-                viewHolder.parentView = view;
+                viewHolder = new FavListRowController(view, HomeFragment.this);
                 view.setTag(viewHolder);
             }
+
             final City city = CityDao.getCity(cursor);
-            viewHolder.cityDescTv.setText(city.getDesc());
-            DownloadListener listener = new DownloadListener(viewHolder);
-            viewHolder.weakReference = new WeakReference<DownloadListener>(listener);
-            WeatherProvider.retrieveWeather(city.getLatLng(), "metric", listener);
+            viewHolder.update(city);
 
             Log.d("com.backbase.weatherapp", "bindView");
         }
     }
-
-    class DownloadListener implements IDownloadListener<Climate> {
-
-        CityViewHolder holder;
-
-        DownloadListener(CityViewHolder holder) {
-            this.holder = holder;
-        }
-
-        @Override
-        public void completed(String url, final Climate data) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (data != null && holder.weakReference.get() == DownloadListener.this) {
-
-                        holder.parentView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ((IMainActivityListener)getActivity()).showDetails(data);
-                            }
-                        });
-
-                        String u = URL + data.getWeather()[0].getIcon() + ".png";
-                        holder.tempTextView.setText(((int)data.getMain().getTemp()) + "");
-                        if (cancelPotentialDownload(u, holder.imageView)) {
-                            ImageLoaderCallback imageLoaderCallbackProfile = new ImageLoaderCallback(holder.imageView, u, getActivity());
-                            DownloadedDrawable downloadedDrawableImageProfile = new DownloadedDrawable(getResources(), imageLoaderCallbackProfile);
-                            holder.imageView.setImageDrawable(downloadedDrawableImageProfile);
-                            ImageProvider.getInstance().load(u, imageLoaderCallbackProfile, false);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private class CityViewHolder {
-
-        public TextView cityDescTv;
-        public TextView tempTextView;
-        public ImageView imageView;
-        public View parentView;
-
-        WeakReference<DownloadListener> weakReference;
-
-    }
-
-    private static boolean cancelPotentialDownload(String url, ImageView imageView) {
-        ImageLoaderCallback imageLoaderCallback = ImageLoaderCallback.getImageLoaderCallback(imageView);
-
-        if (imageLoaderCallback != null ) {
-            if (!url.equals(imageLoaderCallback.url)) {
-                ImageProvider.getInstance().cancel(url, imageLoaderCallback);
-            } else {
-                //already being downloaded
-                return false;
-            }
-        }
-        return true;
-    }
-
 
 }

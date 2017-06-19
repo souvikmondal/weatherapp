@@ -8,13 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="WeatherThemeClearSky" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorWeatherBackgroundClearDay</item>
-        <item name="colorBackground">@color/colorWeatherBackgroundClearDay</item>
-        <item name="textColorPrimary">@color/colorWeatherTextClearDay</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

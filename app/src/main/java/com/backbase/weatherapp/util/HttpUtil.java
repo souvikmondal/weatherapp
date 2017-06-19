@@ -3,6 +3,8 @@ package com.backbase.weatherapp.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.backbase.weatherapp.util.provider.types.RemoteResource;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,6 +47,21 @@ public final class HttpUtil {
         if (responseCode == HttpURLConnection.HTTP_OK) {
 
             return BitmapFactory.decodeStream(httpURLConnection.getInputStream());
+
+        } else {
+            throw new IOException();
+        }
+    }
+
+    public static final RemoteResource get(String endpoint, RemoteResource remoteResource) throws IOException {
+        URL url = new URL(endpoint);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.connect();
+        int responseCode = httpURLConnection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+
+            remoteResource.prepare(httpURLConnection.getInputStream());
+            return remoteResource;
 
         } else {
             throw new IOException();
