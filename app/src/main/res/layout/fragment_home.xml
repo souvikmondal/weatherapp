@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.backbase.weatherapp.home.HomeFragment">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLightDark"
+        android:textSize="@dimen/headingTextSize"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:textColor="@color/colorPrimaryText"
+        android:text="Favourites"
+        />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLightDark"
-            android:textSize="@dimen/headingTextSize"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:textColor="@color/colorPrimaryText"
-            android:text="Favourites"
-            />
-
-        <ListView
-            android:id="@+id/rv_cities"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-        </ListView>
-
-    </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:layout_alignParentRight="true">
+
+        <ImageButton
+            android:id="@+id/fab"
+            android:background="#80000000"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/map"/>
+    </FrameLayout>
+
+    <ListView
+        android:layout_below="@id/title"
+        android:id="@+id/rv_cities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </ListView>
 
 
 
 
-</android.support.design.widget.CoordinatorLayout>
+
+
+</RelativeLayout>

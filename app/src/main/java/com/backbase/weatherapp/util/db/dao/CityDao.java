@@ -1,6 +1,7 @@
 package com.backbase.weatherapp.util.db.dao;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -40,6 +41,11 @@ public class CityDao {
         cursor.close();
 
         return cities;
+    }
+
+    public static void removeAllCities(Context context) {
+        SQLiteDatabase db = DBHelper.getInstance(context).getReadableDatabase();
+        db.delete(DBContract.TABLE_NAME, null, null);
     }
 
     public static String getCityName(Cursor cursor) {

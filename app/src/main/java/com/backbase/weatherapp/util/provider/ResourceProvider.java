@@ -1,6 +1,12 @@
 package com.backbase.weatherapp.util.provider;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 
 import com.backbase.weatherapp.util.HttpUtil;
@@ -17,24 +23,34 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by souvik on 7/10/2016.
  */
-public final class ResourceProvider {
-
-    private static ResourceProvider instance = new ResourceProvider();
-
-    public static ResourceProvider getInstance() {
-        return instance;
-    }
+public final class ResourceProvider extends Fragment{
 
     private LruCache<String, RemoteResource> mResourceCache;
     private Map<String, List<IDownloadListener>> mCallbackMap;
     private Lock lock;
 
-    private ResourceProvider() {
+    public ResourceProvider() {
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+        setRetainInstance(true);
+    }
+
+    private void init() {
         initResourceCache();
         mCallbackMap = new WeakHashMap<>();
         lock = new ReentrantLock();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
 
     public void load(@NonNull String url, @NonNull RemoteResource remoteResource,
                      @NonNull IDownloadListener callback, boolean force) {
@@ -106,16 +122,27 @@ public final class ResourceProvider {
         return remoteResource;
     }
 
-    private void notifyDownloaded(String mUrl, RemoteResource remoteResource) {
+    /**
+     * Should notify the result in the UI/Main thread.
+     */
+    private void notifyDownloaded(final String mUrl, final RemoteResource remoteResource) {
         lock.lock();
         try {
-            List<IDownloadListener> callbackList = mCallbackMap.remove(mUrl);
-            addResourceToCache(mUrl, remoteResource);
-            if (callbackList != null && callbackList.size() > 0) {
-                for (IDownloadListener callback:callbackList) {
-                    callback.completed(mUrl, remoteResource.getResource());
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //from UI thread and activity is always there
+                    List<IDownloadListener> callbackList = mCallbackMap.remove(mUrl);
+                    addResourceToCache(mUrl, remoteResource);
+                    if (callbackList != null && callbackList.size() > 0) {
+                        for (IDownloadListener callback:callbackList) {
+                            callback.completed(mUrl, remoteResource.getResource());
+                        }
+                    }
                 }
-            }
+            });
+
         } finally {
             lock.unlock();
         }

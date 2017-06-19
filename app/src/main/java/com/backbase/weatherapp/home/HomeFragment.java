@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.backbase.weatherapp.R;
@@ -30,7 +31,7 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
     private ListView recyclerView;
     private CityAdapter cityAdapter;
     private HomePresenter homePresenter;
-    private FloatingActionButton favButton;
+    private ImageButton favButton;
 
     public HomeFragment() {
     }
@@ -60,7 +61,7 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
 //                ((IMainActivityListener)getActivity()).showDetails();
 //            }
 //        });
-        favButton = (FloatingActionButton) parent.findViewById(R.id.fab);
+        favButton = (ImageButton) parent.findViewById(R.id.fab);
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

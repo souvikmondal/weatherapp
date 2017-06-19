@@ -46,7 +46,9 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
         this.city = city;
         this.cityDescTv.setText(city.getDesc());
         this.tempTextView.setTag(city);
-        WeatherProvider.getInstance().retrieveWeather(city.getLatLng(), "metric", this, true);
+        WeatherProvider.getInstance().retrieveWeather(
+                city.getLatLng(), "metric", this, true,
+                ((MainActivity)parent.getActivity()).getResourceProvider());
         parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,12 +65,12 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
 
     }
 
-    private static boolean cancelPotentialDownload(String url, ImageView imageView) {
+    private boolean cancelPotentialDownload(String url, ImageView imageView) {
         ImageLoaderCallback imageLoaderCallback = ImageLoaderCallback.getImageLoaderCallback(imageView);
 
         if (imageLoaderCallback != null ) {
             if (!url.equals(imageLoaderCallback.url)) {
-                ResourceProvider.getInstance().cancel(url, imageLoaderCallback);
+                ((MainActivity)parent.getActivity()).getResourceProvider().cancel(url, imageLoaderCallback);
             } else {
                 //already being downloaded
                 return false;
@@ -80,30 +82,21 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
     @Override
     public void completed(final String key, final Climate data) {
 
-        final Activity activity = parent.getActivity();
+        if (data != null && (tempTextView.getTag() != null
+                && tempTextView.getTag().equals(city))) {
 
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                if (data != null && (tempTextView.getTag() != null
-                        && tempTextView.getTag().equals(city))) {
-
-                    String u = URL + data.getWeather()[0].getIcon() + ".png";
-                    tempTextView.setText(((int)data.getMain().getTemp()) + "");
-                    if (cancelPotentialDownload(u, imageView)) {
-                        ImageLoaderCallback imageLoaderCallbackProfile =
-                                new ImageLoaderCallback(imageView, u, activity);
-                        DownloadedDrawable downloadedDrawableImageProfile =
-                                new DownloadedDrawable(activity.getResources(), imageLoaderCallbackProfile);
-                        imageView.setImageDrawable(downloadedDrawableImageProfile);
-                        ImageResource imageResource = new ImageResource();
-                        ResourceProvider.getInstance().load(u, imageResource, imageLoaderCallbackProfile, false);
-                    }
-                }
-                }
-            });
+            String u = URL + data.getWeather()[0].getIcon() + ".png";
+            tempTextView.setText(((int)data.getMain().getTemp()) + "");
+            if (cancelPotentialDownload(u, imageView)) {
+                ImageLoaderCallback imageLoaderCallbackProfile =
+                        new ImageLoaderCallback(imageView, u, parent.getActivity());
+                DownloadedDrawable downloadedDrawableImageProfile =
+                        new DownloadedDrawable(parent.getResources(), imageLoaderCallbackProfile);
+                imageView.setImageDrawable(downloadedDrawableImageProfile);
+                ImageResource imageResource = new ImageResource();
+                ((MainActivity)parent.getActivity()).getResourceProvider()
+                        .load(u, imageResource, imageLoaderCallbackProfile, false);
+            }
         }
 
     }

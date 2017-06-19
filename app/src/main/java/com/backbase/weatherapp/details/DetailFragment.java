@@ -1,6 +1,7 @@
 package com.backbase.weatherapp.details;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.databinding.WeatherTodayLayoutBinding;
+import com.backbase.weatherapp.main.MainActivity;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.model.weather.Climate;
 import com.backbase.weatherapp.util.provider.IDownloadListener;
@@ -51,7 +53,7 @@ public class DetailFragment extends Fragment implements IDownloadListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        setHasOptionsMenu(false);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
@@ -61,7 +63,9 @@ public class DetailFragment extends Fragment implements IDownloadListener{
         super.onAttach(context);
         detailPresenter = new DetailPresenter((AppCompatActivity) context);
         setCustomToolBarForFragment();
-        WeatherProvider.getInstance().retrieveWeather(city.getLatLng(), "metric", this, false);
+        WeatherProvider.getInstance().retrieveWeather(
+                city.getLatLng(), "metric", this, true,
+                ((MainActivity)context).getResourceProvider());
     }
 
     private void setCustomToolBarForFragment() {
@@ -90,12 +94,21 @@ public class DetailFragment extends Fragment implements IDownloadListener{
     }
 
     @Override
-    public void completed(String key, Object data) {
-        if (data instanceof Climate) {
-            Climate c = (Climate) data;
-            c.setName(city.getDesc());
-            binding.setModel(detailPresenter.getTodayWeatherBindingModel(c));
-            binding.executePendingBindings();
+    public void completed(String key, final Object data) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (data instanceof Climate) {
+                        Climate c = (Climate) data;
+                        c.setName(city.getDesc());
+                        binding.setModel(detailPresenter.getTodayWeatherBindingModel(c));
+                        binding.executePendingBindings();
+                    }
+                }
+            });
         }
+
     }
 }

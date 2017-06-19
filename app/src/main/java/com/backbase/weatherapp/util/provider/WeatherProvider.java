@@ -42,14 +42,14 @@ public final class WeatherProvider {
 
     public final void retrieveWeather(LatLng latLng, String unit,
                                              IDownloadListener<Climate> listener,
-                                             boolean force){
+                                             boolean force, ResourceProvider resourceProvider){
 
         String endpoint = URL.replace("$lat", String.valueOf(latLng.latitude))
                 .replace("$lon", String.valueOf(latLng.longitude));
 
         ClimateResource climateResource = new ClimateResource();
 
-        ResourceProvider.getInstance().load(endpoint, climateResource, listener, force);
+        resourceProvider.load(endpoint, climateResource, listener, force);
 
     }
 
