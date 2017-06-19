@@ -38,6 +38,11 @@ public class ImageLoaderCallback implements IDownloadListener<Bitmap> {
         }
     }
 
+    @Override
+    public void error(Exception ex) {
+
+    }
+
     public static ImageLoaderCallback getImageLoaderCallback(ImageView imageView) {
         if (imageView != null) {
             Drawable drawable = imageView.getDrawable();

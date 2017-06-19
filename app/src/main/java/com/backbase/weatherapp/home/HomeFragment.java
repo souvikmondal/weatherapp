@@ -2,6 +2,7 @@ package com.backbase.weatherapp.home;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
@@ -31,7 +32,7 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
     private ListView recyclerView;
     private CityAdapter cityAdapter;
     private HomePresenter homePresenter;
-    private ImageButton favButton;
+    private FloatingActionButton favButton;
 
     public HomeFragment() {
     }
@@ -55,19 +56,19 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
 
     private void initControls(View parent) {
         recyclerView = (ListView) parent.findViewById(R.id.rv_cities);
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                ((IMainActivityListener)getActivity()).showDetails();
-//            }
-//        });
-        favButton = (ImageButton) parent.findViewById(R.id.fab);
+
+        favButton = (FloatingActionButton) parent.findViewById(R.id.fab);
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showMap();
             }
         });
+    }
+
+    public void notifyDataSetChange() {
+        Cursor cursor = homePresenter.getFavCities();
+        cityAdapter.swapCursor(cursor);
     }
 
     @Override

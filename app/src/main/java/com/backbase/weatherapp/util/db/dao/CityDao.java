@@ -48,6 +48,14 @@ public class CityDao {
         db.delete(DBContract.TABLE_NAME, null, null);
     }
 
+    public static void remove(City city, Context context) {
+        SQLiteDatabase db = DBHelper.getInstance(context).getReadableDatabase();
+        String where = DBContract.COL_CITY + "=?";
+        String[] vals = new String[1];
+        vals[0] = city.getDesc();
+        db.delete(DBContract.TABLE_NAME, where, vals);
+    }
+
     public static String getCityName(Cursor cursor) {
         return cursor.getString(cursor.getColumnIndex(DBContract.COL_CITY));
     }

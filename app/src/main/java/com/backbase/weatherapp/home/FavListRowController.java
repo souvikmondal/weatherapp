@@ -11,6 +11,7 @@ import com.backbase.weatherapp.main.MainActivity;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.model.weather.Climate;
 import com.backbase.weatherapp.model.weather.Main;
+import com.backbase.weatherapp.util.db.dao.CityDao;
 import com.backbase.weatherapp.util.provider.IDownloadListener;
 import com.backbase.weatherapp.util.provider.ResourceProvider;
 import com.backbase.weatherapp.util.provider.WeatherProvider;
@@ -56,6 +57,22 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
                 if (activity != null) {
                     ((MainActivity)activity).showDetails(city);
                 }
+            }
+        });
+        parentView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                View view = parentView.findViewById(R.id.delete);
+                view.setVisibility(View.VISIBLE);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CityDao.remove(city, parent.getContext());
+                        ((HomeFragment)parent).notifyDataSetChange();
+
+                    }
+                });
+                return true;
             }
         });
     }

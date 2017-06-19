@@ -1,6 +1,6 @@
 <resources>
     <dimen name="fab_margin">20dp</dimen>
     <dimen name="tv_temp_text_size">40sp</dimen>
-    <dimen name="headingTextSize">16sp</dimen>
-    <dimen name="bodyTextSize">14sp</dimen>
+    <dimen name="headingTextSize">22sp</dimen>
+    <dimen name="bodyTextSize">20sp</dimen>
 </resources>
