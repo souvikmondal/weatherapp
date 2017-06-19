@@ -111,4 +111,9 @@ public class DetailFragment extends Fragment implements IDownloadListener{
         }
 
     }
+
+    @Override
+    public void error(Exception ex) {
+
+    }
 }

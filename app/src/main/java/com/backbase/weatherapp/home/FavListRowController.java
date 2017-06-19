@@ -100,4 +100,9 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
         }
 
     }
+
+    @Override
+    public void error(Exception ex) {
+
+    }
 }

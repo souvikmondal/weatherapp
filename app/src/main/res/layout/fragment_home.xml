@@ -19,19 +19,6 @@
         android:text="Favourites"
         />
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true">
-
-        <ImageButton
-            android:id="@+id/fab"
-            android:background="#80000000"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/map"/>
-    </FrameLayout>
-
     <ListView
         android:layout_below="@id/title"
         android:id="@+id/rv_cities"
@@ -42,7 +29,20 @@
     </ListView>
 
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
+        <ImageButton
+            android:id="@+id/fab"
+            android:background="#80000000"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:src="@drawable/map"/>
+
+    </FrameLayout>
 
 
 

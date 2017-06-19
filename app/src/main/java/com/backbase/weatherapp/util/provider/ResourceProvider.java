@@ -148,6 +148,31 @@ public final class ResourceProvider extends Fragment{
         }
     }
 
+    /**
+     * Should notify the result in the UI/Main thread.
+     */
+    private void notifyError(final String mUrl, final Exception e) {
+        lock.lock();
+        try {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //from UI thread and activity is always there
+                    List<IDownloadListener> callbackList = mCallbackMap.remove(mUrl);
+                    if (callbackList != null && callbackList.size() > 0) {
+                        for (IDownloadListener callback:callbackList) {
+                            callback.error(e);
+                        }
+                    }
+                }
+            });
+
+        } finally {
+            lock.unlock();
+        }
+    }
+
     final class DownloaderTask implements Runnable {
 
         private String mUrl;
@@ -164,7 +189,7 @@ public final class ResourceProvider extends Fragment{
                 remoteResource = HttpUtil.get(mUrl, remoteResource);
                 notifyDownloaded(mUrl, remoteResource);
             } catch (IOException e) {
-                notifyDownloaded(mUrl, null);
+                notifyError(mUrl, e);
                 e.printStackTrace();
             }
         }

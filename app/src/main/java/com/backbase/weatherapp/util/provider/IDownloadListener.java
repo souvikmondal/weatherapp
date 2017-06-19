@@ -8,4 +8,6 @@ public interface IDownloadListener<T> {
 
     public void completed(String key, T data);
 
+    public void error(Exception ex);
+
 }
