@@ -99,23 +99,25 @@ public class FavListRowController implements View.OnClickListener, IDownloadList
     @Override
     public void completed(final String key, final Climate data) {
 
-        if (data != null && (tempTextView.getTag() != null
-                && tempTextView.getTag().equals(city))) {
+        Activity activity = parent.getActivity();
+        if (activity != null) {
+            if (data != null && (tempTextView.getTag() != null
+                    && tempTextView.getTag().equals(city))) {
 
-            String u = URL + data.getWeather()[0].getIcon() + ".png";
-            tempTextView.setText(((int)data.getMain().getTemp()) + "");
-            if (cancelPotentialDownload(u, imageView)) {
-                ImageLoaderCallback imageLoaderCallbackProfile =
-                        new ImageLoaderCallback(imageView, u, parent.getActivity());
-                DownloadedDrawable downloadedDrawableImageProfile =
-                        new DownloadedDrawable(parent.getResources(), imageLoaderCallbackProfile);
-                imageView.setImageDrawable(downloadedDrawableImageProfile);
-                ImageResource imageResource = new ImageResource();
-                ((MainActivity)parent.getActivity()).getResourceProvider()
-                        .load(u, imageResource, imageLoaderCallbackProfile, false);
+                String u = URL + data.getWeather()[0].getIcon() + ".png";
+                tempTextView.setText(((int)data.getMain().getTemp()) + "");
+                if (cancelPotentialDownload(u, imageView)) {
+                    ImageLoaderCallback imageLoaderCallbackProfile =
+                            new ImageLoaderCallback(imageView, u, activity);
+                    DownloadedDrawable downloadedDrawableImageProfile =
+                            new DownloadedDrawable(activity.getResources(), imageLoaderCallbackProfile);
+                    imageView.setImageDrawable(downloadedDrawableImageProfile);
+                    ImageResource imageResource = new ImageResource();
+                    ((MainActivity)activity).getResourceProvider()
+                            .load(u, imageResource, imageLoaderCallbackProfile, false);
+                }
             }
         }
-
     }
 
     @Override

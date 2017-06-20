@@ -2,7 +2,6 @@ package com.backbase.weatherapp.home;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
@@ -11,11 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.backbase.weatherapp.R;
-import com.backbase.weatherapp.main.IFavAddedListener;
 import com.backbase.weatherapp.main.MainActivity;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.util.db.dao.CityDao;
@@ -23,7 +20,7 @@ import com.backbase.weatherapp.util.db.dao.CityDao;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeFragment extends BottomSheetDialogFragment implements IFavAddedListener {
+public class HomeFragment extends BottomSheetDialogFragment {
 
 
 
@@ -69,13 +66,6 @@ public class HomeFragment extends BottomSheetDialogFragment implements IFavAdded
     public void notifyDataSetChange() {
         Cursor cursor = homePresenter.getFavCities();
         cityAdapter.swapCursor(cursor);
-    }
-
-    @Override
-    public void onAdded(City city) {
-        Cursor cursor = homePresenter.getFavCities();
-        cityAdapter.swapCursor(cursor);
-        cityAdapter.notifyDataSetChanged();
     }
 
     private class CityAdapter extends CursorAdapter {

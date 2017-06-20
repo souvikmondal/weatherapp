@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.model.City;
 import com.backbase.weatherapp.model.weather.Climate;
+import com.backbase.weatherapp.util.DateUtil;
 
 /**
  * Created by Souvik on 18/06/17.
@@ -18,11 +19,10 @@ public class DetailPresenter {
         this.activityContext = activityContext;
     }
 
-    public DetailBindingModel getTodayWeatherBindingModel(Climate climate) {
+    public DetailBindingModel getTodayWeatherBindingModel(Climate climate, City city) {
         DetailBindingModel model = new DetailBindingModel();
-        model.setCity(climate.getName());
-        //model.setCurrentDate(climate.getDt() + ""); //TODO date format
-        model.setCurrentDate("Today");
+        model.setCity(city.getDesc());
+        model.setCurrentDate(DateUtil.getDayOfWeek(climate.getDt())); //TODO date format
         model.setHumidity(((int)climate.getMain().getHumidity()) + "%");
         model.setTemp(String.valueOf((int)climate.getMain().getTemp()));
         model.setTemp_max(String.valueOf((int)climate.getMain().getTemp_max()));

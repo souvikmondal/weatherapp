@@ -13,6 +13,10 @@ public class City {
     private double lon;
     private LatLng latLng;
 
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
     public LatLng getLatLng() {
         latLng = new LatLng(lat, lon);
         return latLng;

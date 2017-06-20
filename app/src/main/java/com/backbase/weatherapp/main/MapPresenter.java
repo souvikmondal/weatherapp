@@ -44,6 +44,7 @@ class MapPresenter {
         cancelOtherPotentialTask();
         String key = latLng.latitude + "," + latLng.longitude;
         FutureTask<String> futureTask = new FutureTask<String>(new ReverseGeoCoderTask(latLng));
+        cityMap.put(key, futureTask);
         AsyncProvider.getInstance().execute(futureTask);
         try {
             return futureTask.get();
@@ -54,6 +55,8 @@ class MapPresenter {
         }
         return null;
     }
+
+
 
     private void cancelOtherPotentialTask() {
         Iterator<FutureTask<String>> iterator = cityMap.values().iterator();
@@ -89,6 +92,7 @@ class MapPresenter {
         public String call() throws Exception {
             Geocoder geocoder = new Geocoder(context);
             List<Address> addresses = geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
+            String[] values = new String[2];
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
                 String city = address.getLocality();

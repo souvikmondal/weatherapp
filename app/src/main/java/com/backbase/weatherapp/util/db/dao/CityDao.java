@@ -34,7 +34,6 @@ public class CityDao {
             city.setLat(cursor.getDouble(cursor.getColumnIndex(DBContract.COL_LAT)));
             city.setLon(cursor.getDouble(cursor.getColumnIndex(DBContract.COL_LON)));
 
-
             cities.add(city);
         }
 

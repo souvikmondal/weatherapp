@@ -45,23 +45,21 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements IFragmentInteraction,
         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
         LoaderManager.LoaderCallbacks, LocationListener,
         FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG_RES_FRAGMENT = "res_fragment";
+    private static final String TAG_DATA_FRAGMENT = "data_fragment";
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private MapPresenter mapPresenter;
     private FusedLocationProviderClient locationProviderClient;
     private Location currentLocation;
-    private List<IFavAddedListener> favAddedListeners;
     private ResourceProvider resourceProvider;
+    private MainDataFragment dataFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
 
         mapPresenter = new MapPresenter(this);
 
-        favAddedListeners = new ArrayList<>();
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,12 +82,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
 
         boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
         getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
-
-        HomeFragment homeFragment = new HomeFragment();
-        favAddedListeners.add(homeFragment);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.content_fragment, homeFragment)
-                .commit();
 
         resourceProvider = (ResourceProvider) getSupportFragmentManager()
                 .findFragmentByTag(TAG_RES_FRAGMENT);
@@ -104,6 +94,24 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
                     .add(resourceProvider, TAG_RES_FRAGMENT).commit();
         }
 
+        dataFragment = (MainDataFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_DATA_FRAGMENT);
+
+        // If the Fragment is non-null, then it is currently being
+        // retained across a configuration change.
+        if (dataFragment == null) {
+            dataFragment = new MainDataFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(dataFragment, TAG_DATA_FRAGMENT).commit();
+        }
+
+        if(savedInstanceState == null) {
+            HomeFragment homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_fragment, homeFragment)
+                    .commit();
+        }
+
     }
 
     public ResourceProvider getResourceProvider() {
@@ -111,12 +119,24 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     }
 
     public void showDetails(City data) {
+        dataFragment.setSelectedCurrentCity(data);
         DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setCity(data);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, detailFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public City getSelectedCity() {
+        return dataFragment.getSelectedCurrentCity();
+    }
+
+    public void setLastRefreshTime() {
+        dataFragment.setLastRefreshTime();
+    }
+
+    public boolean isRefreshRequired() {
+        return dataFragment.isTimeForRefresh();
     }
 
     public void showMap() {
@@ -266,13 +286,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
             public void onInfoWindowClick(Marker marker) {
                 String city = (String) marker.getTag();
                 mapPresenter.saveCityAsFav(city, marker.getPosition());
-                for(IFavAddedListener listener:favAddedListeners) {
-                    City c = new City();
-                    c.setLon(marker.getPosition().longitude);
-                    c.setLat(marker.getPosition().latitude);
-                    c.setDesc(city);
-                    listener.onAdded(c);
-                }
             }
         });
 
@@ -337,15 +350,5 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
         }
     }
 
-    class AddressLoader extends AsyncTaskLoader<String>{
 
-        public AddressLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public String loadInBackground() {
-            return null;
-        }
-    }
 }
