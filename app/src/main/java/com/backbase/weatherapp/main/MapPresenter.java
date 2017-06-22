@@ -5,9 +5,9 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.backbase.weatherapp.model.City;
-import com.backbase.weatherapp.util.provider.AsyncProvider;
-import com.backbase.weatherapp.util.db.DBHelper;
-import com.backbase.weatherapp.util.db.dao.CityDao;
+import com.backbase.weatherapp.util.ThreadPool;
+import com.backbase.weatherapp.db.DBHelper;
+import com.backbase.weatherapp.db.dao.CityDao;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ class MapPresenter {
         city.setDesc(cityDesc);
         city.setLat(latLng.latitude);
         city.setLon(latLng.longitude);
-        AsyncProvider.getInstance().execute(new SaveCityToDBTask(city));
+        ThreadPool.getInstance().execute(new SaveCityToDBTask(city));
     }
 
     String getCity(LatLng latLng) {
@@ -45,7 +45,7 @@ class MapPresenter {
         String key = latLng.latitude + "," + latLng.longitude;
         FutureTask<String> futureTask = new FutureTask<String>(new ReverseGeoCoderTask(latLng));
         cityMap.put(key, futureTask);
-        AsyncProvider.getInstance().execute(futureTask);
+        ThreadPool.getInstance().execute(futureTask);
         try {
             return futureTask.get();
         } catch (InterruptedException e) {

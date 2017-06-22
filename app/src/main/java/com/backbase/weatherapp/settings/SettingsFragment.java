@@ -1,21 +1,25 @@
 package com.backbase.weatherapp.settings;
 
 
-import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.backbase.weatherapp.R;
-import com.backbase.weatherapp.util.db.dao.CityDao;
-import com.backbase.weatherapp.util.provider.AsyncProvider;
+import com.backbase.weatherapp.main.ClimateDataController;
+import com.backbase.weatherapp.main.MainActivity;
+import com.backbase.weatherapp.main.BackgroundTaskListener;
+import com.backbase.weatherapp.main.provider.ProviderException;
+import com.backbase.weatherapp.util.PreferenceUtil;
+import com.backbase.weatherapp.main.provider.AppDataProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +47,12 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.title_settings));
+    }
+
     private void init(View parent) {
 
         resetBtn = (Button) parent.findViewById(R.id.reset);
@@ -50,25 +60,52 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final Activity activity = getActivity();
+                final AppDataProvider appDataProvider = ((MainActivity) getActivity()).getDataController();
 
-                AsyncProvider.getInstance().execute(new Runnable() {
+                appDataProvider.clearBookmarkedCities(new BackgroundTaskListener<Cursor>() {
                     @Override
-                    public void run() {
-                        if (activity != null) {
-                            CityDao.removeAllCities(activity);
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(activity, "All boolmarked cities removed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
+                    public void completed(String key, Cursor data) {
+                        Toast.makeText(appDataProvider.getActivity(),
+                                "Bookmarks cleared.", Toast.LENGTH_SHORT).show();
                     }
-                });
+
+                    @Override
+                    public void error(ProviderException ex) {
+
+                    }
+                }, getActivity());
             }
         });
+
+        RadioButton metric = ((RadioButton)parent.findViewById(R.id.radio_metric));
+        metric.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    PreferenceUtil.saveUnitSystem(getActivity(), "metric");
+                    ClimateDataController.getInstance().setForceRefresh();
+                }
+            }
+        });
+
+
+        RadioButton imperial = ((RadioButton)parent.findViewById(R.id.radio_imperial));
+        imperial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    PreferenceUtil.saveUnitSystem(getActivity(), "imperial");
+                    ClimateDataController.getInstance().setForceRefresh();
+                }
+            }
+        });
+
+        if (PreferenceUtil.getUnitSystem(getActivity()).equals("metric")) {
+            metric.setChecked(true);
+        } else {
+            imperial.setChecked(true);
+        }
+
     }
 
 }

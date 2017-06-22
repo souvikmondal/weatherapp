@@ -15,6 +15,15 @@ public class DetailBindingModel {
     private String currentDate;
     private String tempUnit;
     private String rainChance;
+    private String status;
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 
     public void setRainChance(String rainChance) {
         this.rainChance = rainChance;

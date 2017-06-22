@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.db;
+package com.backbase.weatherapp.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

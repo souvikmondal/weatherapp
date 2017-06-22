@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00BCD4</color>
-    <color name="colorPrimaryLight">#84FFFF</color>
-    <color name="colorPrimaryDark">#006064</color>
-    <color name="colorPrimaryLightDark">#00838F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorSecondar">#2196F3</color>
+    <color name="colorPrimaryLight">#F4FF81</color>
+    <color name="colorPrimaryDark">#1A237E</color>
+    <color name="colorPrimaryLightDark">#EF6C00</color>
+    <color name="colorAccent">#D500F9</color>
     <color name="colorPrimaryText">#FFFFFF</color>
+    <color name="colorAltText">#424242</color>
     <color name="colorBodyHeader">#00B8D4</color>
     <color name="colorTab">#E0E0E0</color>
 
-    <color name="colorWeatherBackgroundRainy">#009688</color>
-    <color name="colorWeatherTextRainy">#E0F7FA</color>
-
-    <color name="colorWeatherBackgroundClearDay">#FFF9C4</color>
-    <color name="colorWeatherTextClearDay">#F57F17</color>
-
-    <color name="colorWeatherBackgroundCloudy">#2196F3</color>
-    <color name="colorWeatherTextCloudy">#FFFFFF</color>
-
-    <color name="colorWeatherBackgroundStorm">#455A64</color>
-    <color name="colorWeatherTextStorm">#FFFFFF</color>
-
-    <color name="colorWeatherBackgroundSnow">#00BCD4</color>
-    <color name="colorWeatherTextSnow">#FFFFFF</color>
-
-    <color name="colorWeatherBackgroundDrizzle">#E0F2F1</color>
-    <color name="colorWeatherTextDrizzle">#004D40</color>
+    <color name="textColorNormal">#424242</color>
 </resources>

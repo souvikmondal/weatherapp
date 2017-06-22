@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.provider.types;
+package com.backbase.weatherapp.main.provider.types;
 
 import com.backbase.weatherapp.model.weather.Climate;
 import com.google.gson.Gson;

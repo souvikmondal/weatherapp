@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.provider;
+package com.backbase.weatherapp.util;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -9,23 +9,27 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by Souvik on 16/06/17.
  */
 
-public final class AsyncProvider {
+public final class ThreadPool {
 
-    private static AsyncProvider instance;
+    private static ThreadPool instance;
     private static Lock lock = new ReentrantLock();
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-    private AsyncProvider() {
-        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+    private ThreadPool() {
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
     }
 
-    public static final AsyncProvider getInstance() {
+    public static final ThreadPool getInstance() {
         lock.lock();
-        if (instance == null)
-            instance = new AsyncProvider();
-        lock.unlock();
-        return instance;
+        try {
+            if (instance == null)
+                instance = new ThreadPool();
+            return instance;
+        } finally {
+            lock.unlock();
+        }
+
     }
 
     public void execute(Runnable runnable) {

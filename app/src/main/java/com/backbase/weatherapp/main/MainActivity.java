@@ -2,38 +2,28 @@ package com.backbase.weatherapp.main;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.AsyncTaskLoader;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.backbase.weatherapp.help.HelpFragment;
 import com.backbase.weatherapp.R;
 import com.backbase.weatherapp.details.DetailFragment;
+import com.backbase.weatherapp.help.HelpFragment;
 import com.backbase.weatherapp.home.HomeFragment;
 import com.backbase.weatherapp.model.City;
+import com.backbase.weatherapp.model.weather.Climate;
 import com.backbase.weatherapp.settings.SettingsFragment;
-import com.backbase.weatherapp.util.IFragmentInteraction;
-import com.backbase.weatherapp.util.provider.ResourceProvider;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.backbase.weatherapp.main.provider.AppDataProvider;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,36 +35,63 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MainActivity extends AppCompatActivity implements IFragmentInteraction,
-        OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
-        LoaderManager.LoaderCallbacks, LocationListener,
-        FragmentManager.OnBackStackChangedListener {
+public class MainActivity extends AppCompatActivity implements
+        OnMapReadyCallback, FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG_RES_FRAGMENT = "res_fragment";
     private static final String TAG_DATA_FRAGMENT = "data_fragment";
 
     private GoogleMap googleMap;
-    private GoogleApiClient googleApiClient;
     private MapPresenter mapPresenter;
     private FusedLocationProviderClient locationProviderClient;
     private Location currentLocation;
-    private ResourceProvider resourceProvider;
-    private MainDataFragment dataFragment;
+    private AppDataProvider appDataProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(LocationServices.API)
-                .build();
+        setContentView(R.layout.activity_main);
 
+        init();
+
+        initToolbar();
+
+        initDataController();
+
+        showHomeFragment(savedInstanceState);
+
+    }
+
+    private void init() {
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         mapPresenter = new MapPresenter(this);
+    }
 
-        setContentView(R.layout.activity_main);
+    private void showHomeFragment(Bundle savedInstanceState) {
+        if(savedInstanceState == null) {
+            HomeFragment homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_fragment, homeFragment)
+                    .commit();
+        }
+    }
+
+    private void initDataController() {
+        appDataProvider = (AppDataProvider) getSupportFragmentManager()
+                .findFragmentByTag(TAG_RES_FRAGMENT);
+
+        // If the Fragment is non-null, then it is currently being
+        // retained across a configuration change.
+        if (appDataProvider == null) {
+            appDataProvider = new AppDataProvider();
+            getSupportFragmentManager().beginTransaction()
+                    .add(appDataProvider, TAG_RES_FRAGMENT).commit();
+        }
+    }
+
+    private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -82,44 +99,25 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
 
         boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
         getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
-
-        resourceProvider = (ResourceProvider) getSupportFragmentManager()
-                .findFragmentByTag(TAG_RES_FRAGMENT);
-
-        // If the Fragment is non-null, then it is currently being
-        // retained across a configuration change.
-        if (resourceProvider == null) {
-            resourceProvider = new ResourceProvider();
-            getSupportFragmentManager().beginTransaction()
-                    .add(resourceProvider, TAG_RES_FRAGMENT).commit();
-        }
-
-        dataFragment = (MainDataFragment) getSupportFragmentManager()
-                .findFragmentByTag(TAG_DATA_FRAGMENT);
-
-        // If the Fragment is non-null, then it is currently being
-        // retained across a configuration change.
-        if (dataFragment == null) {
-            dataFragment = new MainDataFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(dataFragment, TAG_DATA_FRAGMENT).commit();
-        }
-
-        if(savedInstanceState == null) {
-            HomeFragment homeFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_fragment, homeFragment)
-                    .commit();
-        }
-
     }
 
-    public ResourceProvider getResourceProvider() {
-        return resourceProvider;
+    public AppDataProvider getDataController() {
+        return appDataProvider;
+    }
+
+    public void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) getSystemService(
+                            INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(
+                    getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public void showDetails(City data) {
-        dataFragment.setSelectedCurrentCity(data);
+        hideSoftKeyboard();
+        ClimateDataController.getInstance().setSelectedCurrentCity(data);
         DetailFragment detailFragment = new DetailFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, detailFragment)
@@ -127,19 +125,9 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
                 .commit();
     }
 
-    public City getSelectedCity() {
-        return dataFragment.getSelectedCurrentCity();
-    }
-
-    public void setLastRefreshTime() {
-        dataFragment.setLastRefreshTime();
-    }
-
-    public boolean isRefreshRequired() {
-        return dataFragment.isTimeForRefresh();
-    }
-
     public void showMap() {
+        hideSoftKeyboard();
+        getSupportActionBar().setTitle(getString(R.string.title_map));
         SupportMapFragment mapFragment = new SupportMapFragment();
         mapFragment.setHasOptionsMenu(false);
         getSupportFragmentManager().beginTransaction()
@@ -150,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     }
 
     public void showHelp() {
+        hideSoftKeyboard();
         HelpFragment helpFragment = new HelpFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, helpFragment)
@@ -158,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
     }
 
     public void showSettings() {
+        hideSoftKeyboard();
         SettingsFragment settingsFragment = new SettingsFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_fragment, settingsFragment)
@@ -226,38 +216,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            showSettings();
-            return true;
-        }
-
-        else if (id == R.id.action_help) {
-            showHelp();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void next(Fragment fragment) {
-
-    }
 
     private void addMarkerOnMap(LatLng latLng) {
         googleMap.clear();
@@ -292,31 +250,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentInteract
         if (currentLocation != null) {
             moveMapTo(currentLocation);
         }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public Loader onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader loader, Object data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
     }
 
     @Override

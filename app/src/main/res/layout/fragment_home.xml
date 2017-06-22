@@ -6,71 +6,77 @@
     android:layout_height="match_parent"
     tools:context="com.backbase.weatherapp.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/title"
+    <RelativeLayout
+        android:id="@+id/search"
+        android:paddingTop="@dimen/paddingNormal"
+        android:layout_margin="@dimen/paddingScreen"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryLightDark"
-        android:textSize="@dimen/headingTextSize"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingLeft="15dp"
-        android:textColor="@color/colorPrimaryText"
-        android:text="Favourites"
-        />
+        android:background="@drawable/grey_bk_shade"
+        android:layout_height="wrap_content">
 
-    <ListView
-        android:layout_below="@id/title"
-        android:id="@+id/rv_cities"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="100dp"
-        >
+        <TextView
+            android:id="@+id/autotitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/paddingNormal"
+            android:textColor="@color/textColorNormal"
+            android:textSize="@dimen/normalTextSize"
+            android:text="@string/lbl_add_fav"/>
 
-    </ListView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/paddingNormal"
+            android:clickable="true"
+            android:layout_below="@id/autotitle"
+            android:src="@android:drawable/ic_dialog_map"/>
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true">
-
-        <RelativeLayout
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete"
+            android:layout_toRightOf="@id/fab"
+            android:layout_below="@id/autotitle"
+            android:layout_alignBottom="@id/fab"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/autotitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:textColor="@color/colorBodyHeader"
-                android:textSize="14sp"
-                android:text="Bookmark City (Type name or locate in Map)"/>
-
-            <AutoCompleteTextView
-                android:layout_marginTop="10dp"
-                android:id="@+id/autocomplete"
-                android:layout_below="@id/autotitle"
-                android:layout_width="match_parent"
-                android:layout_marginRight="50dp"
-                android:layout_height="wrap_content" />
-
-        </RelativeLayout>
+            android:layout_marginRight="@dimen/paddingNormal"
+            android:textSize="@dimen/normalTextSize"
+            android:layout_height="wrap_content" />
 
 
-    </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_dialog_map"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/search"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/paddingScreen"
+        android:background="@drawable/grey_bk_shade"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/normalTextSize"
+            android:paddingTop="@dimen/paddingNormal"
+            android:paddingBottom="@dimen/paddingNormal"
+            android:paddingLeft="@dimen/paddingNormal"
+            android:textColor="@color/colorSecondar"
+            android:text="@string/lbl_fav"
+            />
+
+        <ListView
+            android:layout_below="@id/title"
+            android:id="@+id/rv_cities"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </ListView>
+
+    </RelativeLayout>
+
 
 
 

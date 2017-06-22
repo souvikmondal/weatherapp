@@ -9,31 +9,34 @@
         android:id="@+id/unittitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="20dp"
-        android:textSize="20sp"
-        android:text="Unit System: " />
+        android:paddingLeft="@dimen/paddingScreen"
+        android:paddingTop="@dimen/paddingNormal"
+        android:textSize="@dimen/normalTextSize"
+        android:text="@string/lbl_pref_unit"
+        android:layout_alignTop="@+id/radio"
+        android:textAlignment="center"
+        android:layout_alignParentStart="true" />
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/unittitle"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/paddingScreen"
         android:id="@+id/radio"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/radio_pirates"
+            android:id="@+id/radio_metric"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Metric"
-            android:textSize="20sp"
+            android:text="@string/lbl_metric"
+            android:textSize="@dimen/normalTextSize"
             android:visibility="visible" />
-        <RadioButton android:id="@+id/radio_ninjas"
+        <RadioButton android:id="@+id/radio_imperial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Imperial"
-            android:textSize="20sp"/>
+            android:text="@string/lbl_imperial"
+            android:textSize="@dimen/normalTextSize"/>
     </RadioGroup>
 
     <TextView
@@ -41,10 +44,11 @@
         android:layout_below="@id/radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="30dp"
-        android:textSize="20sp"
-        android:text="Reset Bookmarked Cities: " />
+        android:paddingLeft="@dimen/paddingScreen"
+        android:paddingTop="@dimen/paddingScreen"
+        android:layout_marginTop="@dimen/paddingScreen"
+        android:textSize="@dimen/normalTextSize"
+        android:text="@string/lbl_reset_btn_desc" />
 
     <Button
         android:id="@+id/reset"
@@ -52,7 +56,7 @@
         android:layout_below="@id/radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="OK"/>
+        android:layout_marginTop="@dimen/paddingScreen"
+        android:text="@string/lbl_reset_btn"/>
 
 </RelativeLayout>

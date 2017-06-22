@@ -1,5 +1,6 @@
 package com.backbase.weatherapp.util;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -18,8 +19,8 @@ public class DateUtil {
         return DAYS[calendar.get(Calendar.DAY_OF_WEEK) - 1];
     }
 
-    public static boolean isAfter(long timeInSec) {
-        return (timeInSec * 1000) > System.currentTimeMillis();
+    public static boolean isAfter(long timeInSec, long currentDate) {
+        return (timeInSec * 1000) > (currentDate * 1000);
     }
 
     public static final String getNextDay(String day) {
@@ -28,7 +29,7 @@ public class DateUtil {
             next = "MON";
         } else if (day.equalsIgnoreCase("MON")) {
             next = "TUE";
-        } else if (day.equalsIgnoreCase("TUE")) {
+        } else if (day.equalsIgnoreCase("TUES")) {
             next = "WED";
         } else if (day.equalsIgnoreCase("WED")) {
             next = "THU";
@@ -42,12 +43,18 @@ public class DateUtil {
         return next;
     }
 
+    public static final String formatTime(long timeInMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        return simpleDateFormat.format(new Date(timeInMillis));
+    }
+
     public static final String getTimeOfDay(long timeInSec) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timeInSec * 1000);
+        long t = ((long)timeInSec) * 1000l;
+        calendar.setTimeInMillis(t);
 
         return calendar.get(Calendar.HOUR) +
-                ((calendar.get(Calendar.AM_PM) == 1) ? " AM" : " PM");
+                ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? " AM" : " PM");
     }
 
 }

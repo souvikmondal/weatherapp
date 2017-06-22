@@ -2,16 +2,14 @@ package com.backbase.weatherapp.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
-import com.backbase.weatherapp.util.provider.types.RemoteResource;
+import com.backbase.weatherapp.main.provider.types.RemoteResource;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -20,9 +18,12 @@ import java.net.URL;
 
 public final class HttpUtil {
 
+    private static final int TIMEOUT = 10000;
+
     public static final String get(String endpoint) throws IOException {
         URL url = new URL(endpoint);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setReadTimeout(TIMEOUT);
         httpURLConnection.connect();
         int responseCode = httpURLConnection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -42,6 +43,7 @@ public final class HttpUtil {
     public static final Bitmap getBitmap(String endpoint) throws IOException {
         URL url = new URL(endpoint);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setReadTimeout(TIMEOUT);
         httpURLConnection.connect();
         int responseCode = httpURLConnection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -56,6 +58,7 @@ public final class HttpUtil {
     public static final RemoteResource get(String endpoint, RemoteResource remoteResource) throws IOException {
         URL url = new URL(endpoint);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setReadTimeout(TIMEOUT);
         httpURLConnection.connect();
         int responseCode = httpURLConnection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {

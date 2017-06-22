@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.provider.types;
+package com.backbase.weatherapp.main.provider.types;
 
 import java.io.IOException;
 import java.io.InputStream;

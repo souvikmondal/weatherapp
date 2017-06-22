@@ -5,11 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-import com.backbase.weatherapp.util.provider.IDownloadListener;
+import com.backbase.weatherapp.main.BackgroundTaskListener;
+import com.backbase.weatherapp.main.provider.ProviderException;
 
 import java.lang.ref.WeakReference;
 
-public class ImageLoaderCallback implements IDownloadListener<Bitmap> {
+public class ImageLoaderCallback implements BackgroundTaskListener<Bitmap> {
 
     private WeakReference<ImageView> imageViewWeakReference;
     public String url;
@@ -39,7 +40,7 @@ public class ImageLoaderCallback implements IDownloadListener<Bitmap> {
     }
 
     @Override
-    public void error(Exception ex) {
+    public void error(ProviderException ex) {
 
     }
 

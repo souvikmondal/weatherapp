@@ -9,9 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 
 import com.backbase.weatherapp.R;
+import com.backbase.weatherapp.main.MainActivity;
 
 /**
  * Created by Souvik on 19/06/17.
@@ -47,6 +49,7 @@ public class HelpFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.title_help));
         initWebView();
     }
 

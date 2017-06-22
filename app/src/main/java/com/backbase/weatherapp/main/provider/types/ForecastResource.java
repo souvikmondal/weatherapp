@@ -1,6 +1,5 @@
-package com.backbase.weatherapp.util.provider.types;
+package com.backbase.weatherapp.main.provider.types;
 
-import com.backbase.weatherapp.model.weather.Climate;
 import com.backbase.weatherapp.model.weather.Forecast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

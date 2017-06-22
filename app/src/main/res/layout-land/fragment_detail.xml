@@ -5,271 +5,238 @@
             name="model"
             type="com.backbase.weatherapp.details.DetailBindingModel"/>
     </data>
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swip_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:orientation="horizontal">
-
+        android:layout_height="match_parent">
         <RelativeLayout
-            android:id="@+id/todaylayout"
-            android:layout_width="0dp" android:layout_height="match_parent"
-            android:layout_weight=".6"
-            android:padding="10dp"
-            android:background="@color/colorPrimary">
-
-            <ImageView
-                android:id="@+id/statusimage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/sun"/>
-
-            <TextView
-                android:id="@+id/city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.city}"
-                android:textSize="30sp"/>
-
-            <TextView
-                android:id="@+id/currentdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/city"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.currentDate}"
-                android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/statusimage"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.temp}"
-                android:textSize="100sp"/>
-
-            <TextView
-                android:id="@+id/tempmaxlabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/temp"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Max: "
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/tempmax"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/temp"
-                android:layout_toRightOf="@id/tempmaxlabel"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.temp_max}"
-                android:layout_marginRight="5dp"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/tempminlabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/temp"
-                android:layout_toRightOf="@id/tempmax"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Min: "
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/tempmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/temp"
-                android:layout_toRightOf="@id/tempminlabel"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.temp_min}"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/dot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/statusimage"
-                android:textColor="@color/colorPrimaryText"
-                android:layout_toRightOf="@id/temp"
-                android:layout_marginTop="15dp"
-                android:text="O"
-                android:textSize="30sp"
-                />
-
-            <TextView
-                android:id="@+id/unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/statusimage"
-                android:layout_toRightOf="@id/dot"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.tempUnit}"
-                android:textSize="60sp"
-                />
-
-            <TextView
-                android:id="@+id/humidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/temp"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="25dp"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.humidity}"
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/humidityTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/temp"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="25dp"
-                android:layout_toLeftOf="@id/humidity"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Humidity: "
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/wind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/humidity"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.wind}"
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/windTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/wind"
-                android:layout_below="@id/humidityTitle"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Wind: "
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/rain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/wind"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/colorPrimaryText"
-                android:text="@{model.rainChance}"
-                android:textSize="20sp"
-                />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight=".4"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_below="@id/todaylayout"
-                android:id="@+id/recyclerview"
+            <TextView
+                android:id="@+id/last_updated"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v7.widget.RecyclerView>
-
-            <ProgressBar
-                android:id="@+id/progressbar"
-                android:layout_centerInParent="true"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background ="@xml/progress"/>
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/paddingNormal"
+                android:textSize="@dimen/normalTextSize"/>
 
             <LinearLayout
+                android:layout_below="@id/last_updated"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_alignParentBottom="true"
-                android:background="@color/colorPrimaryLight"
-                android:paddingBottom="2dp"
                 android:weightSum="1">
 
-                <Button
-                    android:id="@+id/first"
+                <RelativeLayout
+                    android:id="@+id/todaylayout"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight=".2"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/tabbtn"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:text="Monday"/>
+                    android:layout_weight=".4"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/paddingNormal"
+                    android:layout_margin="@dimen/paddingScreen"
+                    android:background="@drawable/grey_bk_shade">
 
-                <Button
-                    android:id="@+id/second"
+                    <ImageView
+                        android:id="@+id/statusimage"
+                        android:layout_below="@+id/tempminlabel"
+                        android:layout_width="@dimen/weatherIconSize"
+                        android:layout_height="@dimen/weatherIconSize"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/sun"/>
+
+                    <TextView
+                        android:id="@+id/status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{model.status}"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="@dimen/paddingScreen"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_current"
+                        android:textStyle="bold|italic"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/paddingScreen"/>
+
+                    <TextView
+                        android:id="@+id/city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@{model.city}"
+                        android:textSize="@dimen/weatherMainCityTextSize"/>
+
+                    <TextView
+                        android:id="@+id/currentdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/city"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@{model.currentDate}"
+                        android:layout_marginTop="@dimen/paddingNormal"
+                        android:textSize="@dimen/normalTextSize"/>
+
+                    <TextView
+                        android:id="@+id/temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@{model.temp}"
+                        android:textSize="@dimen/weatherMainTempTextSize"/>
+
+                    <TextView
+                        android:id="@+id/tempmaxlabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/temp"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@string/lbl_max_temp"
+                        android:textSize="@dimen/normalTextSize"/>
+
+                    <TextView
+                        android:id="@+id/tempmax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/temp"
+                        android:layout_toRightOf="@id/tempmaxlabel"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@{model.temp_max}"
+                        android:textSize="@dimen/normalTextSize"/>
+
+                    <TextView
+                        android:id="@+id/tempminlabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tempmaxlabel"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@string/lbl_min_temp"
+                        android:textSize="@dimen/normalTextSize"/>
+
+                    <TextView
+                        android:id="@+id/tempmin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tempmaxlabel"
+                        android:layout_toRightOf="@id/tempminlabel"
+                        android:textColor="@color/textColorNormal"
+                        android:layout_marginLeft="@dimen/paddingNormal"
+                        android:text="@{model.temp_min}"
+                        android:textSize="@dimen/normalTextSize"/>
+
+                    <TextView
+                        android:id="@+id/dot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorNormal"
+                        android:layout_toRightOf="@id/temp"
+                        android:layout_marginTop="5dp"
+                        android:text="O"
+                        android:textSize="@dimen/normalTextSize"
+                        />
+
+                    <TextView
+                        android:id="@+id/unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/dot"
+                        android:layout_alignTop="@id/temp"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@{model.tempUnit}"
+                        android:textSize="@dimen/weatherMainTempUnitTextSize"
+                        />
+
+                    <TextView
+                        android:id="@+id/humidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/paddingNormal"
+                        android:layout_below="@id/currentdate"
+                        android:textColor="@color/textColorNormal"
+                        android:layout_marginLeft="@dimen/paddingNormal"
+                        android:text="@{model.humidity}"
+                        android:textSize="@dimen/normalTextSize"
+                        />
+
+                    <TextView
+                        android:id="@+id/humidityTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/paddingNormal"
+                        android:layout_toLeftOf="@id/humidity"
+                        android:layout_below="@id/currentdate"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@string/lbl_humidity"
+                        android:textSize="@dimen/normalTextSize"
+                        />
+
+                    <TextView
+                        android:id="@+id/wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/humidity"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/textColorNormal"
+                        android:layout_marginLeft="@dimen/paddingNormal"
+                        android:text="@{model.wind}"
+                        android:textSize="@dimen/normalTextSize"
+                        />
+
+                    <TextView
+                        android:id="@+id/windTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/wind"
+                        android:layout_below="@id/humidityTitle"
+                        android:textColor="@color/textColorNormal"
+                        android:text="@string/lbl_wind"
+                        android:textSize="@dimen/normalTextSize"
+                        />
+
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight=".2"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/tabbtn"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:text="Monday"/>
+                    android:layout_weight=".6"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_bk_shade"
+                    android:layout_margin="@dimen/paddingScreen"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/third"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight=".2"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/tabbtn"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:text="Monday"/>
+                    <android.support.design.widget.TabLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:id="@+id/tab"
+                        android:background="@drawable/tabbtn"
+                        app:tabTextColor="#757575"
+                        app:tabTextAppearance="@style/TabText"
+                        app:tabSelectedTextColor="@color/colorAccent"
+                        >
 
-                <Button
-                    android:id="@+id/fourth"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight=".2"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/tabbtn"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:text="Monday"/>
+                    </android.support.design.widget.TabLayout>
 
-                <Button
-                    android:id="@+id/fifth"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight=".2"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/tabbtn"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:text="Monday"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
+                    </android.support.v7.widget.RecyclerView>
 
+                </LinearLayout>
             </LinearLayout>
+
+
+
         </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-
-
-    </LinearLayout>
 </layout>
 
 

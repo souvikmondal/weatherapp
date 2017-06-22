@@ -1,6 +1,19 @@
 <resources>
-    <dimen name="fab_margin">20dp</dimen>
-    <dimen name="tv_temp_text_size">40sp</dimen>
-    <dimen name="headingTextSize">22sp</dimen>
-    <dimen name="bodyTextSize">20sp</dimen>
+
+    <dimen name="paddingNormal">10dp</dimen>
+    <dimen name="paddingScreen">15dp</dimen>
+
+    <dimen name="smallTextSize">10sp</dimen>
+
+    <dimen name="dotSize">6dp</dimen>
+
+    <dimen name="weatherRowImageSize">40dp</dimen>
+
+    <dimen name="forecastCardWidth">300dp</dimen>
+
+    <dimen name="weatherMainTempTextSize">40sp</dimen>
+    <dimen name="weatherMainTempUnitTextSize">40sp</dimen>
+    <dimen name="weatherMainCityTextSize">20sp</dimen>
+    <dimen name="normalTextSize">14sp</dimen>
+    <dimen name="weatherIconSize">60dp</dimen>
 </resources>

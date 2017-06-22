@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.db.dao;
+package com.backbase.weatherapp.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.backbase.weatherapp.model.City;
-import com.backbase.weatherapp.util.db.DBContract;
-import com.backbase.weatherapp.util.db.DBHelper;
-import com.google.android.gms.maps.model.LatLng;
+import com.backbase.weatherapp.db.DBContract;
+import com.backbase.weatherapp.db.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;

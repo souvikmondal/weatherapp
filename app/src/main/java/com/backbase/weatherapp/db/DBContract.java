@@ -1,4 +1,4 @@
-package com.backbase.weatherapp.util.db;
+package com.backbase.weatherapp.db;
 
 /**
  * Created by Souvik on 16/06/17.

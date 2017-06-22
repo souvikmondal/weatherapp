@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:color="#FFFFFF">
-        <shape><solid android:color="@color/colorAccent"/></shape>
+    <item android:state_selected="true" android:color="@color/colorAltText">
+        <shape><solid android:color="#BBDEFB"/></shape>
     </item>
-    <item android:state_selected="true" android:color="#006064">
-        <shape><solid android:color="#E0F7FA"/></shape>
-    </item>
-    <item android:state_enabled="true" android:color="#000000">
+    <item android:color="@color/colorPrimaryText">
         <shape><solid android:color="@color/colorTab"/></shape>
     </item>
-    <item android:color="#ffffff" />
+
 </selector>
