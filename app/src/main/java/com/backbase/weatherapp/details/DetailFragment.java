@@ -101,7 +101,13 @@ public class DetailFragment extends BaseFragment implements BackgroundTaskListen
             public void run() {
                 //make sure we have the activity context
                 if (getActivity() != null) {
-                    refreshCurrentClimate(true);
+                    //display rotating icon
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(true);
+                        }
+                    });
                 }
             }
         }, ClimateDataController.REFRESH_FREQUENCY);
@@ -127,6 +133,12 @@ public class DetailFragment extends BaseFragment implements BackgroundTaskListen
         lastUpdatedTextView = (TextView) view.findViewById(R.id.last_updated);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swip_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshCurrentClimate(true);
+            }
+        });
     }
 
     private void refreshCurrentClimate(boolean force) {
@@ -137,15 +149,6 @@ public class DetailFragment extends BaseFragment implements BackgroundTaskListen
                 ClimateDataController.getInstance().getSelectedCurrentCity().getLatLng(),
                 PreferenceUtil.getUnitSystem(getActivity()), this, forceRequired,
                 ((MainActivity)getActivity()).getDataController());
-
-        //display rotating icon
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
 
     }
 
