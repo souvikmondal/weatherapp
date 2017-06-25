@@ -29,7 +29,7 @@ public class DateUtil {
             next = "MON";
         } else if (day.equalsIgnoreCase("MON")) {
             next = "TUE";
-        } else if (day.equalsIgnoreCase("TUES")) {
+        } else if (day.equalsIgnoreCase("TUE")) {
             next = "WED";
         } else if (day.equalsIgnoreCase("WED")) {
             next = "THU";
